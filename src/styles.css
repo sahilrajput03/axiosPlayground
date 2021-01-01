@@ -7,6 +7,7 @@ textarea,
 button,
 .box {
   border-radius: 10px;
+  outline: none;
 }
 textarea {
   width: 80%;
