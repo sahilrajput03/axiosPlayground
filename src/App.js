@@ -108,7 +108,7 @@ export default function App() {
       <div className='spacer1'></div>
       <b>Disclaimer:</b>
       <br /> 1. No signup required <br /> 2. For now there's no securitey to any account.
-      <br /> 3. Tip: Press enter to login. or 'sahil').
+      <br /> 3. Tip: Press enter to login. or 'sahil'.
       <br /> 4. Changing db only works for when you set valid jsonbackendserver in the 'Input backend database' field and press enter.
       <br /> 5. This axios playground perfectly works for locally saving to broser too.
       <br /> 6. Please allow 2 seconds after typing into request code area to get it saved to localStorage to browser.
