@@ -112,21 +112,27 @@ export default function App() {
         </h5>
       </header>
       {/*  */}
-      <section className='flex-start'>
-        <span class='emoji-medium'>🧑︎‍🚀︎</span> You - <b className='margin-left-6'>{activeLogin}</b>
-      </section>
-      {/*  */}
-      <section className='flex-start height-30'>
-        <span className='emoji-medium'>📁︎ </span> Active sheet - <b className='margin-left-6'>{activeSheet}</b>
-      </section>
-      {/*  */}
-      <section className='flex-end login-section'>
-        <span className='emoji-medium'>📢︎ </span> Change user : <Login fetchRef={fetchRef} login={login} setLogin={setLogin} />
-      </section>
-      {/*  */}
-      <section className='flex-end login-section'>
-        <span className='emoji-medium'>📁︎</span> <span class='change-sheet-text'>Change sheet :</span>
-        <ChooseSheet activeSheet={activeSheet} />
+      <section className='row space-between'>
+        <div className='col'>
+          <div className='flex-start row-centered'>
+            <span class='emoji-medium'>🧑︎‍🚀︎</span> You - <b className='margin-left-6'>{activeLogin}</b>
+          </div>
+          {/*  */}
+          <div className='flex-start height-30 row-centered'>
+            <span className='emoji-medium'>📁︎ </span> Active sheet - <b className='margin-left-6'>{activeSheet}</b>
+          </div>
+        </div>
+        {/*  */}
+        <div className='col'>
+          <div className='flex-end login-section row-centered'>
+            <span className='emoji-medium'>📢︎ </span> Change user : <Login fetchRef={fetchRef} login={login} setLogin={setLogin} />
+          </div>
+          {/*  */}
+          <div className='flex-end login-section row-centered'>
+            <span className='emoji-medium'>📁︎</span> <span class='change-sheet-text'>Change sheet :</span>
+            <ChooseSheet activeSheet={activeSheet} />
+          </div>
+        </div>
       </section>
       {/*  */}
       {/* <section className='db-buttons'></section> */}

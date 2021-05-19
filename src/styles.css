@@ -164,11 +164,20 @@ input {
   justify-content: center;
 }
 
-section {
+.row-centered {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 10px 0px;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
 }
 
 .height-30 {
