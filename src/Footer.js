@@ -3,7 +3,6 @@ import React from 'react'
 export const Footer = () => {
   return (
     <div class='footer'>
-      <div className='spacer1'></div>
       <b>Disclaimer:</b>
       <ol>
         <li>No signup required</li>

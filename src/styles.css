@@ -73,6 +73,11 @@ textarea {
 input {
   font-weight: bold;
 }
+
+input:focus {
+  outline: none;
+}
+
 .result-new {
   white-space: nowrap;
   resize: both;
@@ -150,11 +155,21 @@ input {
 
 .row {
   display: flex;
-  width: 70vw;
   align-items: center;
 }
 
-.db-select {
+.center-row {
+  justify-content: center;
+}
+
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0px;
+}
+
+.height-30 {
   height: 30px;
 }
 
@@ -182,4 +197,36 @@ input {
   background: red;
   color: white;
   padding: 7px 13px;
+}
+
+.inline {
+  display: inline;
+}
+
+.footer {
+  margin-top: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
+}
+
+.container {
+  margin: 2px auto;
+  width: 80%;
+  max-width: 800px;
+}
+
+.emoji-medium {
+  font-size: 1.5rem;
+}
+
+.input-change-user {
+  text-align: center;
+  margin-left: 10px;
 }

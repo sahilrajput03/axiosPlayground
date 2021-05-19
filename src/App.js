@@ -79,27 +79,41 @@ export default function App() {
 
   const Login = (
     <form
+      className='inline'
       onSubmit={(e) => {
         e.preventDefault()
         fetchRef()
       }}>
-      <input value={login} onChange={({target: {value}}) => setLogin(value)} />
+      <input className='input-change-user' value={login} onChange={({target: {value}}) => setLogin(value)} />
     </form>
   )
 
   return (
-    <div>
-      <h1>Axios Playground</h1>
-      <h4>100% ready for your offline needs for storing your axios requests and their responses right here.</h4>
-      <h5>FYI: All your request and request responses are saved to persistent. Wait for 2 secs and it'll be saved to the server🤠︎.</h5>
-      <br /> 🧯︎ Enter your username and hit enter - {Login}
+    <div className='container'>
+      <header>
+        <h1>Axios Playground</h1>
+        <h4>100% ready for your offline needs for storing your axios requests and responses.</h4>
+        <h5>
+          <span className='emoji-medium'>🤠︎</span> FYI: All your request and request responses are persistent. Every 2 secs cache is saved to the server.
+        </h5>
+      </header>
+      {/*  */}
+      <section>
+        <span class='emoji-medium'>🧑︎‍🚀︎</span> You: <b>{login}</b>
+      </section>
+      {/*  */}
+      <section className='login-section'>
+        <span className='emoji-medium'>🔨︎</span> Change user 📢︎ {Login}
+      </section>
+      {/*  */}
+      <section className='height-30'>
+        <span className='emoji-medium'>🔨︎</span> Active db: <b className='db-name'>{db}</b>
+      </section>
+      {/*  */}
+      <section className='db-buttons'>
+        <DbButtons />
+      </section>
       <br />
-      <div class='row db-select'>
-        🧯︎ Current db: <b className='db-name'>{db}</b>
-        <div className='db-buttons'>
-          <DbButtons />
-        </div>
-      </div>
       <br />
       <br />
       {allUnits?.map((element) => (
@@ -120,7 +134,6 @@ export default function App() {
       </button>
       {ClearButton}
       <br />
-      <br />→ Logged in as <b>{login}</b>
       <Footer />
       🔥︎🔥︎ TESTING: Input backend database url to use:
       <input value={dbPrefix} onChange={({target: {value}}) => setDbPrefix(value)} />
