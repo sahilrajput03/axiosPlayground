@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf docs/* && mv build/* docs && cp backup_CNAME/CNAME docs/ && cpn",
+    "build": "react-scripts build && rm -rf docs/* && mv build/* docs && cp backup_CNAME/CNAME docs/ && gacp",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
