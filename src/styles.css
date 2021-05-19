@@ -144,10 +144,12 @@ input {
 .btn-blue {
   background: skyblue;
   padding: 4px 8px;
+  border: 2px solid deeppink;
   box-shadow: 2px 2px 5px grey;
 }
 
 .btn-blue:hover {
+  border: 2px solid deeppink;
   background: blueviolet;
   color: white;
   box-shadow: 10px 10px 5px grey;
@@ -177,7 +179,7 @@ section {
   margin-left: 10px;
 }
 
-.db-name {
+.margin-left-6 {
   margin-left: 6px;
 }
 
@@ -224,10 +226,37 @@ h6 {
 
 .emoji-medium {
   font-size: 1.5rem;
+  margin: 4px;
 }
 
 .input-change-user {
   text-align: center;
   margin-left: 10px;
   width: 7rem;
+}
+
+.change-sheet-text {
+  margin-right: 10px;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.flex-start {
+  justify-content: flex-start;
+}
+
+/* testting notifications... */
+
+.notification-message {
+  display: none;
+  z-index: 1;
+  background-color: yellow;
+  border-radius: 3rem;
+  position: fixed;
+  margin-left: 70%;
+  padding: 10px;
+  /* background-color: red; */
+  /* transition: background-color ease-out 1000ms, color ease-out 1000ms; */
 }

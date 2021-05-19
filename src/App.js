@@ -12,7 +12,7 @@ import {Footer} from './Footer'
 //new deployment @ https://csb-nljvu.netlify.app/
 
 document.axios = axios
-let postRef
+let postRefGlobal
 
 const localDbUrl = 'https://e53e8cfe24ac.ngrok.io'
 const prodDbUrl = 'https://jsonbackendserver.herokuapp.com'
@@ -25,7 +25,8 @@ export default function App() {
   // const [allUnits, setAllUnits] = useState([<Unit key={Math.random()} />]);
   const [login, setLogin] = useWhatPersistent('login', 'guest')
   const [activeLogin, setActiveLogin] = useWhatPersistent('active-login', 'guest')
-  const [db, setDb] = useWhatPersistent('db', 'one')
+  const [sheet, setSheet] = useWhatPersistent('sheet', 'one')
+  const [activeSheet, setActiveSheet] = useWhatPersistent('active-sheet', 'one')
   // const [db_localStorage, setDb_localStorage] = useLocalStorage('db', null);
   // if (db !== db_localStorage) setDb_localStorage(db);
   const [allUnits, setAllUnits] = useWhatPersistent('allUnits', [])
@@ -35,21 +36,38 @@ export default function App() {
 
   fetchRef = () => {
     log('fetchref executed')
+    // log({sheet})
     axios
-      .post(`${dbPrefix}/${login}_${db}`)
+      .post(`${dbPrefix}/${login}_${sheet}`)
       .then(({data}) => {
         setAllUnits(data.allUnits instanceof Array ? data.allUnits : [])
-        setActiveLogin(login)
-        log('#fetched from', login + db, data)
+
+        setActiveSheet(sheet)
+        setActiveLogin(login) // ? Wow this is awesome!! 4 stage status of state implemented 🥳︎.
+        log('#fetched from', login + sheet, data)
         // log('#fetched', data.allUnits);
       })
       .catch((e) => {})
   }
 
-  postRef = (allUnitsNew) => {
-    axios.post(`${dbPrefix}/${login}_${db}`, {allUnits: allUnitsNew}).catch((e) => {})
-    log(allUnitsNew)
-    log('#posted to =>', login + '_' + db)
+  postRefGlobal = (allUnitsNew) => {
+    axios.post(`${dbPrefix}/${login}_${sheet}`, {allUnits: allUnitsNew}).catch((e) => {})
+    log({allUnitsNew})
+    // alert('saved...')
+    const notificationEl = document.querySelector('.notification-message')
+    if (notificationEl) {
+      notificationEl.style.display = 'block'
+
+      setTimeout(() => {
+        notificationEl.style.display = 'none'
+      }, 1500)
+
+      // Purged Code....
+      // notificationEl.innerText = 'Saved...'
+      // notificationEl.style.backgroundColor = 'yellow'
+      // notificationEl.innerText = ''
+    }
+    log('#posted to =>', login + '_' + sheet)
   }
 
   const ClearButton = (
@@ -57,7 +75,9 @@ export default function App() {
       className='btn-blue'
       onClick={() => {
         setAllUnits([])
-        localStorage.clear()
+        // localStorage.clear() // 🛑︎🛑︎🛑︎did it a moment ago coz i think this not what i want..
+        // below is 🔥︎ 🔥︎experimental code...
+        postRefGlobal([])
       }}>
       Clear List
     </button>
@@ -65,33 +85,25 @@ export default function App() {
 
   useEffect(() => {
     fetchRef()
-  }, [db, dbPrefix])
+  }, [sheet, dbPrefix])
 
-  const DbButtons = () =>
-    ['one', 'two', 'three'].map((dbName, idx) => (
+  const ChooseSheet = ({activeSheet}) =>
+    ['one', 'two', 'three'].map((sheetNameValue, idx) => (
       <button
         className='btn-blue'
+        style={activeSheet === sheetNameValue ? {backgroundColor: 'deeppink'} : {}}
+        // style={ activeSheet === sheetNameValue ? }
         key={idx}
         onClick={() => {
-          setDb(dbName)
+          setSheet(sheetNameValue)
         }}>
-        Set db to {dbName}
+        {sheetNameValue}
       </button>
     ))
 
-  const Login = (
-    <form
-      className='inline'
-      onSubmit={(e) => {
-        e.preventDefault()
-        fetchRef()
-      }}>
-      <input className='input-change-user' value={login} onChange={({target: {value}}) => setLogin(value)} />
-    </form>
-  )
-
   return (
     <div className='container'>
+      <div className='notification-message'>Saved... 🚀︎</div>
       <header>
         <h1>Axios Playground</h1>
         <h4>100% ready for your offline needs for storing your axios requests and responses.</h4>
@@ -100,21 +112,24 @@ export default function App() {
         </h5>
       </header>
       {/*  */}
-      <section>
-        <span class='emoji-medium'>🧑︎‍🚀︎</span> You: <b>{activeLogin}</b>
+      <section className='flex-start'>
+        <span class='emoji-medium'>🧑︎‍🚀︎</span> You - <b className='margin-left-6'>{activeLogin}</b>
       </section>
       {/*  */}
-      <section className='login-section'>
-        <span className='emoji-medium'>🔨︎</span> Change user 📢︎ {Login}
+      <section className='flex-start height-30'>
+        <span className='emoji-medium'>📁︎ </span> Active sheet - <b className='margin-left-6'>{activeSheet}</b>
       </section>
       {/*  */}
-      <section className='height-30'>
-        <span className='emoji-medium'>🔨︎</span> Active db: <b className='db-name'>{db}</b>
+      <section className='flex-end login-section'>
+        <span className='emoji-medium'>📢︎ </span> Change user : <Login fetchRef={fetchRef} login={login} setLogin={setLogin} />
       </section>
       {/*  */}
-      <section className='db-buttons'>
-        <DbButtons />
+      <section className='flex-end login-section'>
+        <span className='emoji-medium'>📁︎</span> <span class='change-sheet-text'>Change sheet :</span>
+        <ChooseSheet activeSheet={activeSheet} />
       </section>
+      {/*  */}
+      {/* <section className='db-buttons'></section> */}
       <br />
       <br />
       <br />
@@ -129,7 +144,7 @@ export default function App() {
         onClick={() => {
           const allUnitsNew = [...allUnits, {ID: v4(), requestName: `Request ${allUnits.length + 1}`}]
           setAllUnits(allUnitsNew)
-          postRef(allUnitsNew)
+          postRefGlobal(allUnitsNew)
         }}>
         Add a request
         {/* add a unit request... */}
@@ -142,6 +157,17 @@ export default function App() {
     </div>
   )
 }
+
+const Login = ({fetchRef, login, setLogin}) => (
+  <form
+    className='inline'
+    onSubmit={(e) => {
+      e.preventDefault()
+      fetchRef()
+    }}>
+    <input className='input-change-user' value={login} onChange={({target: {value}}) => setLogin(value)} />
+  </form>
+)
 
 function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestName}) {
   const [inputCode, setInputCode] = useState(inputCode_remote ?? "axios.get('https://reverberate.ml')")
@@ -156,7 +182,7 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
     let allUnitsNew = allUnits.map((e) => (e.ID === ID ? {...e, inputCode, result} : e))
 
     setAllUnits(allUnitsNew)
-    postRef(allUnitsNew)
+    postRefGlobal(allUnitsNew)
     //  eslint-disable-next-line
   }, [combinedDebounce])
   return (
@@ -174,13 +200,29 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
       <button
         className='btn--fire-request'
         onClick={() => {
-          riskyCode(async () => {
-            let {data} = await eval('document.' + inputCode)
-            if (typeof data === 'object') setResult(JSON.stringify(data, null, 2))
-            else {
-              setResult(data)
+          // Calling async function with 0 delay 🚀︎🚀︎🚀︎...
+          setTimeout(async () => {
+            try {
+              let {data} = await eval('document.' + inputCode)
+              if (typeof data === 'object') {
+                setResult(JSON.stringify(data, null, 2))
+              } else {
+                setResult(data)
+              }
+            } catch (err) {
+              log('#caught::', err)
+              setResult(
+                `REQUEST FALIED !\n Possible errors are - 1. Syntax errors, 2. Target doesn't supports 'CORS'. \n\n\n 🛑︎ Javascript compiler threw - \n    ${err.name} \n    ${err.message}`
+              )
+            } finally {
+              let allUnitsNew = allUnits.map((e) => (e.ID === ID ? {...e, result} : e))
+
+              setAllUnits(allUnitsNew)
+              postRefGlobal(allUnitsNew)
             }
-          }, setResult)
+          })
+
+          // riskyCode(, setResult)
         }}>
         🔥︎ Fire request
       </button>
@@ -192,13 +234,12 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
       <button
         className='btn--delete-request'
         onClick={() => {
-          riskyCode(async () => {
-            // let {data} = await eval('document.' + inputCode)
-            // if (typeof data === 'object') setResult(JSON.stringify(data, null, 2))
-            // else {
-            //   setResult(data)
-            // }
-          }, setResult)
+          // ...😬︎😬︎😬︎😬︎😬︎
+          // log({allUnits})
+          let allUnitsNew = allUnits.filter((e) => e.ID !== ID)
+
+          setAllUnits(allUnitsNew)
+          postRefGlobal(allUnitsNew)
         }}>
         Delete
       </button>
