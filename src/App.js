@@ -8,6 +8,7 @@ import {log, useWhat, getWhat, useWhatPersistent} from 'usewhat'
 import {useDebounce} from 'use-debounce'
 import {v4} from 'uuid'
 import {MyResizable} from './Testing.js'
+import {Footer} from './Footer'
 //new deployment @ https://csb-nljvu.netlify.app/
 
 document.axios = axios
@@ -51,6 +52,7 @@ export default function App() {
 
   const ClearButton = (
     <button
+      className='btn-blue'
       onClick={() => {
         setAllUnits([])
         localStorage.clear()
@@ -63,15 +65,17 @@ export default function App() {
     fetchRef()
   }, [db, dbPrefix])
 
-  const dbsetbuttons = ['one', 'two', 'three'].map((dbName, idx) => (
-    <button
-      key={idx}
-      onClick={() => {
-        setDb(dbName)
-      }}>
-      Set db to {dbName}
-    </button>
-  ))
+  const DbButtons = () =>
+    ['one', 'two', 'three'].map((dbName, idx) => (
+      <button
+        className='btn-blue'
+        key={idx}
+        onClick={() => {
+          setDb(dbName)
+        }}>
+        Set db to {dbName}
+      </button>
+    ))
 
   const Login = (
     <form
@@ -88,6 +92,16 @@ export default function App() {
       <h1>Axios Playground</h1>
       <h4>100% ready for your offline needs for storing your axios requests and their responses right here.</h4>
       <h5>FYI: All your request and request responses are saved to persistent. Wait for 2 secs and it'll be saved to the server🤠︎.</h5>
+      <br /> 🧯︎ Enter your username and hit enter - {Login}
+      <br />
+      <div class='row db-select'>
+        🧯︎ Current db: <b className='db-name'>{db}</b>
+        <div className='db-buttons'>
+          <DbButtons />
+        </div>
+      </div>
+      <br />
+      <br />
       {allUnits?.map((element) => (
         <Unit key={element.ID} ID={element.ID} inputCode={element.inputCode} result={element.result} requestName={element.requestName} />
       ))}
@@ -95,6 +109,7 @@ export default function App() {
       <br />
       <br />
       <button
+        className='btn-blue'
         onClick={() => {
           const allUnitsNew = [...allUnits, {ID: v4(), requestName: `Request ${allUnits.length + 1}`}]
           setAllUnits(allUnitsNew)
@@ -106,25 +121,9 @@ export default function App() {
       {ClearButton}
       <br />
       <br />→ Logged in as <b>{login}</b>
-      <div className='spacer1'></div>
-      <b>Disclaimer:</b>
-      <br /> 1. No signup required <br /> 2. For now there's no securitey to any account.
-      <br /> 3. Tip: Press enter to login. or simply use 'sahil'.
-      <br /> 4. Changing db only works for when you set valid jsonbackendserver in the 'Input backend database' field and press enter.
-      <br /> 5. This axios playground perfectly works for locally saving to broser too.
-      <br /> 6. Please allow 2 seconds after typing into request code area to get it saved to localStorage to browser.
-      <br />
-      4. Tip: For testing use either 'sahil' or 'guest'.
-      <br />
-      Happy Hacking!
-      <br />
-      <br />
-      →Input backend database url to use:
+      <Footer />
+      🔥︎🔥︎ TESTING: Input backend database url to use:
       <input value={dbPrefix} onChange={({target: {value}}) => setDbPrefix(value)} />
-      <br />
-      <br /> 🧯︎ Enter your desired username to login - {Login}
-      <br /> 🧯︎ Current db: <b>{db}</b> <br />
-      {dbsetbuttons} <br />
     </div>
   )
 }
@@ -150,12 +149,15 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
       <legend>{requestName}</legend>
       <textarea
         value={inputCode}
-        placeholder='Write some request with axios, say get/delete/post whatever you like.'
+        rows='1'
+        // wow.. ^^ thats what I wanted...!!
+        placeholder='Write some request with axios.'
         onChange={({target: {value}}) => {
           setInputCode(value)
         }}
       />
       <button
+        className='btn--fire-request'
         onClick={() => {
           riskyCode(async () => {
             let {data} = await eval('document.' + inputCode)
@@ -165,12 +167,26 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
             }
           }, setResult)
         }}>
-        Fire request !!
+        🔥︎ Fire request
       </button>
+
       <br />
-      {/* <textarea id="resultnew">{result}</textarea> THIS DOESN'T WORK GOOD. */}
+      {/* <textarea className="result-new">{result}</textarea> THIS DOESN'T WORK GOOD. */}
       <MyResizable content={result} />
       {/* <pre id="result">{result}</pre> */}
+      <button
+        className='btn--delete-request'
+        onClick={() => {
+          riskyCode(async () => {
+            // let {data} = await eval('document.' + inputCode)
+            // if (typeof data === 'object') setResult(JSON.stringify(data, null, 2))
+            // else {
+            //   setResult(data)
+            // }
+          }, setResult)
+        }}>
+        Delete
+      </button>
     </fieldset>
   )
 }
