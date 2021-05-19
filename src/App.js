@@ -24,6 +24,7 @@ export default function App() {
   // using useLocalStorage here throws warning that circular objects can't be converted ..blah blah.., dig it out...
   // const [allUnits, setAllUnits] = useState([<Unit key={Math.random()} />]);
   const [login, setLogin] = useWhatPersistent('login', 'guest')
+  const [activeLogin, setActiveLogin] = useWhatPersistent('active-login', 'guest')
   const [db, setDb] = useWhatPersistent('db', 'one')
   // const [db_localStorage, setDb_localStorage] = useLocalStorage('db', null);
   // if (db !== db_localStorage) setDb_localStorage(db);
@@ -38,6 +39,7 @@ export default function App() {
       .post(`${dbPrefix}/${login}_${db}`)
       .then(({data}) => {
         setAllUnits(data.allUnits instanceof Array ? data.allUnits : [])
+        setActiveLogin(login)
         log('#fetched from', login + db, data)
         // log('#fetched', data.allUnits);
       })
@@ -99,7 +101,7 @@ export default function App() {
       </header>
       {/*  */}
       <section>
-        <span class='emoji-medium'>🧑︎‍🚀︎</span> You: <b>{login}</b>
+        <span class='emoji-medium'>🧑︎‍🚀︎</span> You: <b>{activeLogin}</b>
       </section>
       {/*  */}
       <section className='login-section'>
