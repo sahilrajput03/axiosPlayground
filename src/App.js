@@ -13,11 +13,13 @@ import {MyResizable} from './Testing.js'
 document.axios = axios
 let postRef
 
-const initialDbPrefix = 'https://e53e8cfe24ac.ngrok.io'
+const localDbUrl = 'https://e53e8cfe24ac.ngrok.io'
+const prodDbUrl = 'https://jsonbackendserver.herokuapp.com'
+const isProd = true
 
 export default function App() {
-  // const dbPrefix = 'https://jsonbackendserver.herokuapp.com';
-  const [dbPrefix, setDbPrefix] = useWhatPersistent('dbprefix', initialDbPrefix)
+  const [dbPrefix, setDbPrefix] = useWhatPersistent('dbprefix', isProd ? prodDbUrl : localDbUrl)
+
   // using useLocalStorage here throws warning that circular objects can't be converted ..blah blah.., dig it out...
   // const [allUnits, setAllUnits] = useState([<Unit key={Math.random()} />]);
   const [login, setLogin] = useWhatPersistent('login', 'guest')
@@ -84,9 +86,8 @@ export default function App() {
   return (
     <div>
       <h1>Axios Playground</h1>
-      <h3>100% ready for your offline needs for storing your axios requests and their responses right here.</h3>
-      <h3>Can't believe ? Make some axios requests and wait for 2 seconds to let it save to localStorage, and boom its saved. Try refresing see if it persists or not.</h3>
-      <h2>Bonus: Add unlimited requests with 'Add request' button below, Yikes!!</h2>
+      <h4>100% ready for your offline needs for storing your axios requests and their responses right here.</h4>
+      <h5>FYI: All your request and request responses are saved to persistent. Wait for 2 secs and it'll be saved to the server🤠︎.</h5>
       {allUnits?.map((element) => (
         <Unit key={element.ID} ID={element.ID} inputCode={element.inputCode} result={element.result} requestName={element.requestName} />
       ))}
