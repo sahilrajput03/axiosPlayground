@@ -255,7 +255,7 @@ h6 {
   background-color: yellow;
   border-radius: 3rem;
   position: fixed;
-  margin-left: 70%;
+  left: 70vw;
   padding: 10px;
   /* background-color: red; */
   /* transition: background-color ease-out 1000ms, color ease-out 1000ms; */
