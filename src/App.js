@@ -8,6 +8,7 @@ import {useDebounce} from 'use-debounce'
 import {v4} from 'uuid'
 import {MyResizable} from './Testing.js'
 import {Footer} from './Footer'
+import {WebRtcApp} from './testing-webrtc'
 //new deployment @ https://csb-nljvu.netlify.app/
 
 document.axios = axios
@@ -17,7 +18,16 @@ const localDbUrl = 'https://e53e8cfe24ac.ngrok.io'
 const prodDbUrl = 'https://jsonbackendserver.herokuapp.com'
 const isProd = true
 
-export default function App() {
+export default function IndexApp() {
+  return (
+    <>
+      {/* <App /> */}
+      <WebRtcApp />
+    </>
+  )
+}
+
+export function App() {
   const [dbPrefix, setDbPrefix] = useWhatPersistent('dbprefix', isProd ? prodDbUrl : localDbUrl)
 
   // using useLocalStorage here throws warning that circular objects can't be converted ..blah blah.., dig it out...
@@ -208,7 +218,8 @@ function Unit({inputCode: inputCode_remote, ID, result: resul_remote, requestNam
           // Calling async function with 0 delay 🚀︎🚀︎🚀︎...
           setTimeout(async () => {
             try {
-              let {data} = await eval('document.' + inputCode)
+              let {data} = await eval('document.' + inputCode) // eg 🏇︎ of working this => document.axios.*("")
+              // 🤺︎🤺︎🤺︎ I have assigned `document.axios` @ line 14, E.g,🥇︎ document.axios = axios
               if (typeof data === 'object') {
                 setResult(JSON.stringify(data, null, 2))
               } else {
